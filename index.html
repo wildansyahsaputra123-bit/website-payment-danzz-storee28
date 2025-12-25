@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran DANA & GOPAY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #000000, #0a0a2a, #1a1a4a);
+            z-index: -2;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffeb3b;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #ffeb3b;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            margin-bottom: 15px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 215, 0, 0.7); }
+            to { text-shadow: 0 0 20px rgba(255, 215, 0, 1); }
+        }
+
+        .payment-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .payment-card {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0, 100, 255, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.8);
+        }
+
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #00a8ff, #0097e6);
+        }
+
+        .payment-card.gopay::before {
+            background: linear-gradient(to right, #00b894, #00a085);
+        }
+
+        .payment-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #00a8ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-card.gopay h2 {
+            color: #00b894;
+        }
+
+        .payment-card h2 i {
+            font-size: 2rem;
+        }
+
+        .number-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffeb3b;
+            text-align: center;
+            animation: numberGlow 3s infinite alternate;
+        }
+
+        @keyframes numberGlow {
+            0% { text-shadow: 0 0 5px rgba(255, 235, 59, 0.7); }
+            100% { text-shadow: 0 0 15px rgba(255, 235, 59, 1); }
+        }
+
+        .copy-btn {
+            background: #ffeb3b;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .copy-btn:hover {
+            background: #ffd600;
+        }
+
+        .instructions {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+        }
+
+        .instructions h2 {
+            color: #ff4081;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .payment-info {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background"></div>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header class="floating">
+            <h1>SELAMAT DATANG DI WEBSITE PAYMENT DANZZ STOREE SELAMAT BERTRANSAKSII🤗✔️ JANGAN LUPA JUGA KALOW MAU TRANSFER LEBIHIN YAH BUAT BELI PESAWATT🗿🗿</h1>
+        </header>
+        
+        <div class="payment-info">
+            <div class="payment-card">
+                <h2><i>DANA</i></h2>
+                <div class="number-container">
+                    <div class="number">0881023613577</div>
+                </div>
+                <button class="copy-btn" data-number="0881023613577">Salin Nomor DANA</button>
+            </div>
+            
+            <div class="payment-card gopay">
+                <h2><i>GOPAY</i></h2>
+                <div class="number-container">
+                    <div class="number">0881023613577</div>
+                </div>
+                <button class="copy-btn" data-number="0881023613577">Salin Nomor GOPAY</button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>Instruksi Pembayaran</h2>
+            <ol>
+                <li>Transfer ke salah satu nomor DANA atau GOPAY di atas</li>
+                <li>Screenshot bukti transfer</li>
+                <li>Kirim bukti transfer ke WhatsApp Admin</li>
+                <li>Tunggu konfirmasi dari Admin</li>
+                <li>Pesanan akan segera diproses setelah pembayaran dikonfirmasi</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Nomor udah tersalin yah jembut!</div>
+
+    <script>
+        // Membuat bintang-bintang
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Ukuran acak untuk bintang
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Posisi acak
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Animasi dengan delay acak
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Fungsi untuk menyalin nomor
+        function setupCopyButtons() {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            const notification = document.getElementById('notification');
+            
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const number = this.getAttribute('data-number');
+                    
+                    // Salin ke clipboard
+                    navigator.clipboard.writeText(number).then(() => {
+                        // Tampilkan notifikasi
+                        notification.classList.add('show');
+                        
+                        // Sembunyikan notifikasi setelah 3 detik
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 3000);
+                    }).catch(err => {
+                        console.error('Gagal menyalin teks: ', err);
+                    });
+                });
+            });
+        }
+        
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            setupCopyButtons();
+        });
+    </script>
+</body>
+</html>
